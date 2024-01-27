@@ -1,9 +1,11 @@
 package com.tweteroojava.api.controllers;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +16,7 @@ import com.tweteroojava.api.models.TweetModel;
 import com.tweteroojava.api.services.TweetService;
 
 import jakarta.validation.Valid;
+
 
 
 @RestController
@@ -33,6 +36,12 @@ public class TweetController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("User must exist");
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(tweet);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<TweetModel>> getAllTweet() {
+        List<TweetModel> tweets = tweetService.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(tweets);
     }
     
 }
