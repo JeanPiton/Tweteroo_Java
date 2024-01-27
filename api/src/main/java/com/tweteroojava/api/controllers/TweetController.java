@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import com.tweteroojava.api.models.TweetModel;
 import com.tweteroojava.api.services.TweetService;
 
 import jakarta.validation.Valid;
+
 
 
 
@@ -41,6 +43,15 @@ public class TweetController {
     @GetMapping
     public ResponseEntity<List<TweetModel>> getAllTweet() {
         List<TweetModel> tweets = tweetService.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(tweets);
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<Object> getuserTweets(@PathVariable Long userId) {
+        Optional<List<TweetModel>> tweets = tweetService.findByUser(userId);
+        if(!tweets.isPresent()){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("User must exist");
+        }
         return ResponseEntity.status(HttpStatus.OK).body(tweets);
     }
     
